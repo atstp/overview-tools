@@ -1,0 +1,75 @@
+overview-tools/
+    this is the overview for `overview-tools`, hooray!
+
+    below, you'll find the descrption of the project structure,
+    what the files do, how they interact with one another, etc, etc
+
+overview-tools/.gitignore
+    the standard ignore file for git. any files and paths listed in
+    here don't get tracked by version control
+
+overview-tools/.npmignore
+    on top of the `.gitignore` file, there are some extra files that
+    **should** be around for development, but **should not** be around
+    for production; in this project's case, those are the ECMAScript 2015
+    files and the tests.
+
+overview-tools/OVERVIEW
+    the overview of the project structure, check it out to learn more!
+
+overview-tools/README.md
+    nuff said
+
+overview-tools/bin/
+overview-tools/bin/overview-tools
+    this is the command line tool. It supports almost all the features
+    that the node module itself supports. Commands look like this:
+
+        ./bin/overview-tools ./OVERVIEW --to tree
+
+    this would get you a nice, commented tree output. fancy!
+
+overview-tools/lib/
+    this directory might not be in your repo if you have the development
+    version; run `npm run build` to generate it.
+
+    It houses the ES5 that's published to npm. If you're curious about a
+    specific file in it, check out that file, but in the `src/` directory
+    instead.
+
+overview-tools/package.json
+overview-tools/src/
+    Everything in here is ES6, woot! (on prepublish to npm, it's compiled
+    to ES5 and stashed in the `lib` folder)
+
+overview-tools/src/converters/
+    this has a collection of small, single-function modules that provide
+    `overview-tools`' functionality for converting to and from different
+    representations.
+
+    Each one of the files in here either goes to or from a JSON
+    representation, making it convenient to convert from one format to
+    another.
+
+overview-tools/src/converters/json-to-html.js
+overview-tools/src/converters/json-to-markdown.js
+overview-tools/src/converters/json-to-overview.js
+overview-tools/src/converters/json-to-tree.js
+overview-tools/src/converters/overview-to-json.js
+overview-tools/src/converters/system-to-json.js
+overview-tools/src/overview-tools.js
+    this file imports all the modules/functions found in `converters` and
+    exports a class (by default) and an object with all the functions.
+
+    Basically, it packages up things in a friendly manor: A class for OOP
+    fans and a collection of functions for Erlang-ians and Haskell-ites.
+
+overview-tools/test/
+    mocha and chai tests, their naming is pretty straightforward; each one
+    matches a specific file from `src`
+
+overview-tools/test/json-to-html.js
+overview-tools/test/json-to-overview.js
+overview-tools/test/json-to-tree.js
+overview-tools/test/overview-to-json.js
+overview-tools/test/system-to-json.js

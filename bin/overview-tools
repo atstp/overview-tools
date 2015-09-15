@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+//var util = require('util');
+var argv = require('minimist')(process.argv.slice(2));
+var Overview = require('../lib/overview-tools.js').default;
+
+//                          --------gross--------
+var transformTo = argv.to ? [].concat(argv.to)[0] : 'overview';
+//                          ---------------------
+var mainArg = argv._[0] ? argv._[0] : false;
+
+// console.log(require('util').inspect(argv,false,null));
+// process.stdin.setEncoding('utf8');
+process.stderr.setEncoding('utf8');
+
+// get the base of the command
+if ((mainArg && fs.existsSync(mainArg)) &&
+    (fs.lstatSync(mainArg).isDirectory() || fs.lstatSync(mainArg).isFile())){
+    var result = new Overview(mainArg);
+    process.stdout.write(selectApproprateOutput(result,transformTo) + '\n');
+    process.exit(0);
+} else {
+    process.stderr.write('overview-tools must have a path or a file to work with');
+    process.exit(1);
+}
+
+function selectApproprateOutput(overviewObj,format){
+    switch (format) {
+        case 'tree':
+            return overviewObj.toTree();
+        case 'tree.whitespace':
+            return overviewObj.toTree('whitespace');
+        case 'tree.extended':
+            return overviewObj.toTree('extended');
+        case 'tree.basic':
+            return overviewObj.toTree('basic');
+
+        case 'HTML':
+        case 'html':
+            return overviewObj.toHTML();
+
+        case 'overview':
+            return overviewObj.toOverview();
+
+        case 'markdown':
+            return overviewObj.toMarkdown();
+        case 'markdown.inline':
+            return overviewObj.toMarkdown('inline');
+        case 'markdown.toc':
+            return overviewObj.toMarkdown('toc');
+
+        case 'JSON':
+        case 'json':
+            return JSON.stringify(overviewObj.toJSON(),null,'    ');
+
+        default:
+            return overviewObj.toOverview();
+    }
+}
+
