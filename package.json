@@ -2,6 +2,10 @@
   "name": "overview-tools",
   "version": "1.0.0",
   "description": "tools for intuitive, clear project structure documentation",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atstp/overview-tools"
+  },
   "main": "index.js",
   "bin": {
     "overview-tools": "./bin/overview-tools"
