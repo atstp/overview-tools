@@ -1,76 +1,93 @@
-# kiosk
+![overview-tools](http://bl.ocks.org/atstp/raw/0a0c7c1a0eeb9ba7d578/banner.svg)
 
-kiosk is a collection of tools for documenting project-structure.
+High level overviews are _awesome_; they make projects friendly in an
+instant. _Explaining and displaying_ your project your project makes
+it easy for users &amp; contributors to understand your project.
 
-your project structure is second nature to you, but it's foreign to everyone
-who hasn't seen your project before. If you can get the idea easily across,
-it'll help people get familiar with your project quickly.
+`overview-tools` is a simple `npm`-available module written in ES6
+that makes it downright, super-darn, i-dare-say, quite easy to build a
+friendly overview for your project.
 
-## about
+-----
 
-start with a file in the root directory of your repo named `OVERVIEW.kiosk`
-([generate one](#generate))
+Add an `OVERVIEW` file to your project &mdash; alongside your
+`README`, `CONTRIBUTING`, `LICENSE`, etc
 
-    project-root/
-        descriptions below the entry, indented four spaces, wrapping whenever
-        you want for readability.
+    overview-tools/
 
-    project-root/src/
-    project-root/src/main.js
-        this file is at path "project-root/src/main.js", it's parent must
-        be listed.
+        this is an example comment
+        it's indented 4 spaces under it's parent
 
-        whitespace will be preserved, so you can run it through a
-        markdown processor like [markdown-js]
+        comment away!
 
-        [markdown-js]: https://github.com/evilstreak/markdown-js
+    overview-tools/bin/
+    overview-tools/bin/overview-tools
+    overview-tools/src/
+    overview-tools/src/converters/
+    overview-tools/src/converters/json-to-html.js
+    ...cut for brevity...
 
-    project-root/src/utils.js
-        this would be describing the utils function.
+this file is readable, maintainable, and straightforward as plain-text,
+but it gets better:
 
-this `OVERVIEW` file is is perfect for human consumption: it's _searchable,
-readable, and maintainable_ so it can stand as a plain-text overview ripe for
-human consumption. It also serves as the source for the rest of the documentation
-tools.
+add one line to your `package.json`
 
-## generator
+    ...
+    "scripts": {
+        "overview": "./node_modules/.bin/overview-tools ./OVERVIEW --to tree"
+    },
+    ...
 
-    cd ~/path/to/your/project/
-    babel-node kiosk-boiler >> OVERVIEW.kiosk
+now new users can `npm run overview`
 
-### outputs
+![tree output](https://gist.githubusercontent.com/atstp/0a0c7c1a0eeb9ba7d578/raw/9d4cb63f4c3c070c8014c5c573a4ee71b7d1db3b/tree-output.png)
 
-you have a couple options for rendering `OVERVIEW.kiosk`:
-[browser](#browser-output),
-[ascii art](#ascii-output),
-[tex](#tex-output).
+## use
 
-#### browser output
+there's a [cli](#cli) and [js modules](#modules) so you can use/extend it
+to your taste.
 
-[TODO: under construction] render an interactive interface
+### cli
 
-#### ascii-art output
+building a boilerplate for your project (from a directory)
 
-[TODO: under construction] render an ascii-art drawing
+    overview-tools ./project-path/
 
-#### tex output
+fancy outputs (from a file)
 
-[TODO: under construction] render latex code for the directory structure
+    overview-tools ./project-path/OVERVIEW --to tree            # a clean utf8 tree
+                                                tree.whitespace # just plain ol indents
+                                                tree.basic      # instead of utf8 fanciness, just use ascii
+                                                html            # html with a bunch of classes and ids
+                                                overview        # the overview format
+                                                markdown        # mmmmmm, mmmmarkdown
+                                                json            # used internally, maybe kinda useful?
 
-<!--
-## Use
+### modules
 
-   npm install babel-node browserify
--->
-# Contributing
+for functional fans
 
-educators, maintainers, and first-time users: please consider contributing!
+    import overviewFunctions as oFun from 'overview-tools';
 
-The goal of kiosk is to provide the _lowest possible barrier_ for new users
-getting up to speed, and the _most convenient_ reference for long-term users.
+    // going to json
+    oFun.dirTreeToJSON(pathToDirectory)
+    oFun.fileToJSON(pathToOverviewFile)
+    oFun.overviewToJSON(overviewSourceText)
 
-overview-tools is written in ES6 &mdash;
-try to keep your code as ES6-y as possible.
+    // different output formats
+    oFun.JSONToHTML(jsonDirectoryTree)
+    oFun.JSONToOverview(jsonDirectoryTree)
+    oFun.JSONToMarkdown(jsonDirectoryTree)
+    oFun.JSONToTree(jsonDirectoryTree)
 
-Anything that will help people learn, or make things more clear is quite welcome!
-http://onsen.io/blog/mocha-chaijs-unit-test-coverage-es6/
+and for the OOP crowd
+
+    import {Overview} from 'overview-tools';
+
+    let myProj = new Overview(pathToOverviewFile);
+
+    myProj.toOverview()
+    myProj.toMarkdown()
+    myProj.toHTML()
+    myProj.toTree()
+    myProj.toJSON()
